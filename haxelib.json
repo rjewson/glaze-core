@@ -1,0 +1,13 @@
+{
+  "name": "glaze-core",
+  "url": "https://github.com/rjewson/glaze-core",
+  "license": "MIT",
+  "classPath": "src",
+  "tags": [],
+  "description": "Library for game physics.",
+  "releasenote": "",
+  "version": "0.1.0",
+  "contributors": ["rjewson"],
+  "dependencies": {
+  }
+}
