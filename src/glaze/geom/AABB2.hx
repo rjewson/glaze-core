@@ -50,7 +50,7 @@ class AABB2
         return b-t;
     }
 
-    public inline function intersect(aabb:AABB):Bool {
+    public inline function intersect(aabb:AABB2):Bool {
         if (l > aabb.r)
             return false;
         else if (r < aabb.l)
