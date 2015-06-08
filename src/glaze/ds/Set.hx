@@ -1,5 +1,5 @@
 package;
 
-class Test {
+class Set {
     
 }

@@ -30,10 +30,6 @@ class Random
         return Math.floor(RandomFloat(min, max));
     }
     
-    inline public static function PseudoInteger(n : Int = Limits.INT32_MAX) : Int {
-        return n > 0 ? Std.int(PseudoFloat() * n) : Std.int(PseudoFloat());
-    }
-
     inline public static function PseudoFloat() : Float {
         PseudoRandomSeed = (PseudoRandomSeed * 9301 + 49297) % 233280;
         return PseudoRandomSeed / 233280.0;
