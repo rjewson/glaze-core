@@ -42,6 +42,12 @@ class DigitalInput
         this.inputCorrection = inputCorrection;
     }
 
+    public function ViewCorrectedMousePosition() {
+        var pos = mousePosition.clone();
+        pos.plusEquals(mouseOffset);
+        return pos;
+    }
+
     public function Update(x:Float,y:Float) : Void {
         mouseOffset.x = x;
         mouseOffset.y = y;

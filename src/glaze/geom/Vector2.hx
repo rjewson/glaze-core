@@ -21,7 +21,7 @@ class Vector2
         this.y = y;
     }
 
-    inline public function copy(v:Vector2) {
+    inline public function copy(v:Vector2):Void {
         this.x = v.x; 
         this.y = v.y; 
     }
@@ -105,6 +105,13 @@ class Vector2
         var d = dot(normal);
         this.x -= 2*d*normal.x;
         this.y -= 2*d*normal.y;
+    }
+
+    public function interpolate(v1:Vector2, v2:Vector2, t:Float) {
+        copy(v1);
+        multEquals(1-t);
+        plusMultEquals(v2,t);
+        // return v1.mult(1 - t).plus(v2.mult(t));
     }
 
 }

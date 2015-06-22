@@ -1,5 +1,7 @@
 package glaze.util;
 
+
+import glaze.geom.Vector2;
 /**
  * ...
  * @author rje
@@ -41,7 +43,7 @@ class Maths
         return Math.min(Math.max(value,min),max);
     } 
     
-    public static function ScaleRectangleWithRatio(containerRect:Vector2D, itemRect:Vector2D):Float {
+    public static function ScaleRectangleWithRatio(containerRect:Vector2, itemRect:Vector2):Float {
         
         //var sX = itemRect.x / containerRect.x;
         //var sY = itemRect.y / containerRect.y;
