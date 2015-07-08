@@ -11,7 +11,7 @@ class Vector2
 
     inline public static var ZERO_TOLERANCE = 1e-08;
 
-    public function new(x:Float=.0,y:Float=.0) {
+    inline public function new(x:Float=.0,y:Float=.0) {
         this.x = x;
         this.y = y;
     }    
@@ -78,7 +78,6 @@ class Vector2
         this.y -= v.y*s;
     }
 
-
     inline public function dot(v:Vector2):Float {
         return x * v.x + y * v.y;
     }
@@ -112,6 +111,18 @@ class Vector2
         multEquals(1-t);
         plusMultEquals(v2,t);
         // return v1.mult(1 - t).plus(v2.mult(t));
+    }
+
+    public function setAngle(angle:Float) {
+        var len = length();
+        this.x = Math.cos(angle)*len;
+        this.y = Math.sin(angle)*len;
+    }
+
+    public function distSqrd(v:Vector2):Float {
+        var dX = x - v.x;
+        var dY = y - v.y;
+        return dX*dX + dY*dY;
     }
 
 }

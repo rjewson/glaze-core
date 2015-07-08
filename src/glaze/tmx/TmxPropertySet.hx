@@ -24,6 +24,6 @@ class TmxPropertySet implements Dynamic<String>
 		}
 	}
 
-	private var keys:Map<String,String>;
+	public var keys:Map<String,String>;
 	
 }

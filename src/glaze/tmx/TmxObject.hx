@@ -13,6 +13,8 @@ class TmxObject
 	public var gid:Int;
 	public var custom:TmxPropertySet;
 	public var shared:TmxPropertySet;
+
+	public var combined:Map<String,String>;
 	
 	public function new(source:Fast, parent:TmxObjectGroup)
 	{
@@ -43,5 +45,17 @@ class TmxObject
 		custom = new TmxPropertySet();
 		for (node in source.nodes.properties)
 			custom.extend(node);
+
+		combined = new Map<String,String>();
+		if (shared!=null) extend(combined,shared.keys);
+		extend(combined,custom.keys);
+
 	}
+
+	function extend(dest:Map<String,String>,source:Map<String,String>) {
+		for (key in source.keys()) {
+			dest.set(key,source.get(key));
+		}
+	}
+
 }
