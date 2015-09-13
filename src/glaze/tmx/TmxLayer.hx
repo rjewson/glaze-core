@@ -189,6 +189,45 @@ class TmxLayer
              }
         }		
         return textureData;
+	}	
+
+	public static function LayerToCollisionData(layer:TmxLayer):Bytes2D {
+		//Assumes all tiles are from same set...function
+		var tileSet:TmxTileSet = null;
+		var collisionData = new Bytes2D(layer.width,layer.height,32,4);
+
+
+        for (xp in 0...layer.width) {
+             for (yp in 0...layer.height) {
+                var source = layer.tileGIDs.get(xp,yp,0);
+
+                if (source>0) {
+                    if (tileSet==null) {
+                        tileSet = layer.map.getGidOwner(source);
+                    }
+                    var relativeID = source-tileSet.firstGID;
+
+                    var props = tileSet.getPropertiesByGid(source);
+                    var tileData = 0x00;
+                    if (props!=null) {
+                    	var collision = props.resolve("collision");
+                    	if (collision!=null&&collision=="1") tileData = tileData | 0x1;
+                    }
+
+                    var y = Math.floor(relativeID/tileSet.numCols);
+                    var x = relativeID-(tileSet.numCols*y);
+                    var v:Int = 0x0 << 24 | tileData << 16 | y << 8 | x;
+                    collisionData.set(xp,yp,0,255);
+                    collisionData.set(xp,yp,1,tileData);
+                    collisionData.set(xp,yp,2,y);
+                    collisionData.set(xp,yp,3,x);
+                } else {
+                    collisionData.set(xp,yp,0,0);
+                }
+             }
+        }		
+        // js.Lib.debug();
+        return collisionData;
 	}
 	
 /*

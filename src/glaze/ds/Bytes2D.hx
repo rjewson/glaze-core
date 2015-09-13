@@ -28,7 +28,7 @@ class Bytes2D
     public function initalize(width:Int, height:Int, cellSize:Int, bytesPerCell:Int, ?data:Bytes):Void {
         this.width = width;
         this.height = height;
-        
+
         this.internalWidth = width * bytesPerCell;
 
         this.cellSize = cellSize;
