@@ -100,6 +100,12 @@ class Vector2
         return new Vector2(-this.y, this.x);
     }
 
+    public function rightHandNormalEquals() {
+        var t = this.x;
+        this.x = -this.y;
+        this.y = t;
+    }
+
     public function reflectEquals(normal:Vector2) {
         var d = dot(normal);
         this.x -= 2*d*normal.x;
