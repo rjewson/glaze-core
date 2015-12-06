@@ -47,6 +47,10 @@ class AABB
         return (_r-_l) * (_b-_t);
     }
 
+    public function area():Float {
+        return (extents.x*extents.y) * 4;
+    }
+
     public function clone(aabb:AABB):AABB {
         var aabb = new AABB();
         aabb.position.copy(position);
