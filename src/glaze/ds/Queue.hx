@@ -2,8 +2,8 @@ package glaze.ds;
 
 class Queue<T> {
 
-	var data:Array<T>;
-	var length:Int;
+	public var data:Array<T>;
+	public var length:Int;
 
 	public function new(length:Int) {
 		this.length = length;
