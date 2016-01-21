@@ -41,6 +41,10 @@ class Vector2
         return Math.sqrt(x * x + y * y);
     }
 
+    inline public function lengthSqrd():Float {
+        return x * x + y * y;
+    }
+
     public function clampScalar(max:Float) {
         var l = length();
         if (l > max) {
