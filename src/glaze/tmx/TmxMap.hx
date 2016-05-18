@@ -14,13 +14,16 @@ class TmxMap
 	public var fullWidth:Int;
 	public var fullHeight:Int;
 
+	public var realTileSize:Int;
+
 	public var properties(default, null):TmxPropertySet;
 	public var tilesets:Array<TmxTileSet>;
 	public var layers:TmxOrderedHash<TmxLayer>;
 	public var objectGroups:TmxOrderedHash<TmxObjectGroup>;
 
-	public function new(data:Dynamic)
+	public function new(data:Dynamic,realTileSize:Int)
 	{
+		this.realTileSize = realTileSize;
 		properties = new TmxPropertySet();
 		var source:Fast = null;
 		var node:Fast = null;

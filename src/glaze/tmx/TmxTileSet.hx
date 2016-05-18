@@ -45,7 +45,7 @@ class TmxTileSet
 		// check for external source
 		if (source.has.source)
 		{
-
+			//TODO sort this BS out, maybe want this...
 		}
 		else // internal
 		{

@@ -1,9 +1,37 @@
 package glaze.ds;
 
+import glaze.ds.DLL.DLLNode;
+
 interface DLLNode<T>
 {
     var prev:T;
     var next:T;
+}
+
+class DLLIterator<T:(DLLNode<T>)> {
+    
+    var dll:DLL<T>;
+    var pointer:DLLNode<T>;
+
+    public function new(dll:DLL<T>) {
+        this.dll = dll;
+        reset();
+    }
+
+    public function reset() {
+        this.pointer = dll.head;
+    }
+
+    public function hasNext():Bool {
+        return pointer !=null;
+    }
+
+    public function next():T {
+        var result = pointer;
+        pointer = pointer.next;
+        return cast result;
+    }
+
 }
 
 class DLL<T:(DLLNode<T>)>
@@ -14,8 +42,16 @@ class DLL<T:(DLLNode<T>)>
 
     public var length:Int;
 
+    var _iterator:DLLIterator<T>;
+
     public function new() {
         length = 0;
+        _iterator = new DLLIterator<T>(this);
+    }
+
+    public function iterator() {
+        _iterator.reset();
+        return _iterator;
     }
 
     //Linked List Functions

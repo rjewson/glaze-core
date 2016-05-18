@@ -57,7 +57,9 @@ class TmxLayer
 						}
 					}
 					// js.Lib.debug();
-					tileGIDs = new glaze.ds.Bytes2D(width,height,32,4,glaze.ds.Bytes2D.uncompressData(chunk,compressed));
+					var _d = glaze.ds.Bytes2D.uncompressData(chunk,compressed);
+					tileGIDs = new glaze.ds.Bytes2D(width,height,parent.realTileSize,4,_d);
+					// tileGIDs.get(4,5,0);
 					//tileGIDs = new Array2D(width,height,Base64.Decode(chunk));//base64ToArray(chunk, width, compressed);
 				case "csv":
 					// chunk = data.innerData;
@@ -169,20 +171,35 @@ class TmxLayer
 		var tileSet:TmxTileSet = null;
 		var textureData = new TypedArray2D(layer.width,layer.height);
 
-
         for (xp in 0...layer.width) {
              for (yp in 0...layer.height) {
-                var source = layer.tileGIDs.get(xp,yp,0);
-// js.Lib.debug();
+                // var source = layer.tileGIDs.get(xp,yp,0); //need 2 bytes here!!!!
+                var source = layer.tileGIDs.get(xp,yp,3) <<24 | layer.tileGIDs.get(xp,yp,2) <<16 | layer.tileGIDs.get(xp,yp,1) <<8 | layer.tileGIDs.get(xp,yp,0);
                 if (source>0) {
-                    if (tileSet==null) {
-                        tileSet = layer.map.getGidOwner(source);
-                    }
-                    var relativeID = source-tileSet.firstGID;
-                    var y = Math.floor(relativeID/tileSet.numCols);
-                    var x = relativeID-(tileSet.numCols*y);
-                    var v:Float = 0xFF << 24 | 0 << 16 | y << 8 | x;
+                	// js.Lib.debug();
+                    // if (tileSet==null) {
+                    //    tileSet = layer.map.getGidOwner(source);
+                    // }
+
+                    var superSet = Math.floor(source/1024);
+                    var superY = Math.floor(superSet/8);
+                    var superX = superSet % 8;
+
+                    var relativeID = source-(superSet*1024);
+					relativeID--; //Not sure why ATM
+                    var y = Math.floor(relativeID/32);
+                    var x = relativeID-(32*y);
+                    var v:Float = superY << 24 | superX << 16 | y << 8 | x;
                     textureData.set(xp,yp,v);
+
+                    //Switched to hardcoded single tileset
+                    //This is not needed now...
+
+                    // var relativeID = source-tileSet.firstGID;
+                    // var y = Math.floor(relativeID/tileSet.numCols);
+                    // var x = relativeID-(tileSet.numCols*y);
+                    // var v:Float = superY << 24 | superX << 16 | y << 8 | x;
+                    // textureData.set(xp,yp,v);
                 } else {
                     textureData.set(xp,yp,0xFFFFFFFF);
                 }
@@ -191,36 +208,51 @@ class TmxLayer
         return textureData;
 	}	
 
-	public static function LayerToCollisionData(layer:TmxLayer):Bytes2D {
+	public static function LayerToCollisionData(layer:TmxLayer,tileSize:Int):Bytes2D {
 		//Assumes all tiles are from same set...function
 		var tileSet:TmxTileSet = null;
-		var collisionData = new Bytes2D(layer.width,layer.height,32,4);
+		var collisionData = new Bytes2D(layer.width,layer.height,tileSize,1);
 
 
         for (xp in 0...layer.width) {
-             for (yp in 0...layer.height) {
+             for (yp in 0...layer.height) { 
                 var source = layer.tileGIDs.get(xp,yp,0);
 
                 if (source>0) {
                     if (tileSet==null) {
                         tileSet = layer.map.getGidOwner(source);
                     }
+
+                    var tileData = 0x00;
                     var relativeID = source-tileSet.firstGID;
 
-                    var props = tileSet.getPropertiesByGid(source);
-                    var tileData = 0x00;
-                    if (props!=null) {
-                    	var collision = props.resolve("collision");
-                    	if (collision!=null&&collision=="1") tileData = tileData | 0x1;
-                    }
+                    // if (relativeID==0) {
+                    // 	tileData = 0x1;
+                    // } else if (relativeID==1) {
+                    // 	tileData = 0x3;
+                    // }	
 
-                    var y = Math.floor(relativeID/tileSet.numCols);
-                    var x = relativeID-(tileSet.numCols*y);
-                    var v:Int = 0x0 << 24 | tileData << 16 | y << 8 | x;
-                    collisionData.set(xp,yp,0,255);
-                    collisionData.set(xp,yp,1,tileData);
-                    collisionData.set(xp,yp,2,y);
-                    collisionData.set(xp,yp,3,x);
+                    // var tileData = 0x00;
+                    // tileData = tileData | 0x1;
+                    collisionData.set(xp,yp,0,1<<relativeID); //Implicit +1
+                    //Original
+                    // var props = tileSet.getPropertiesByGid(source);
+                    // var tileData = 0x00;
+                    // if (props!=null) {
+                    // 	var collision = props.resolve("collision");
+                    // 	if (collision!=null&&collision=="1") tileData = tileData | 0x1;
+                    // }
+
+                    // var y = Math.floor(relativeID/tileSet.numCols);
+                    // var x = relativeID-(tileSet.numCols*y);
+                    // var v:Int = 0x0 << 24 | tileData << 16 | y << 8 | x;
+                    // collisionData.set(xp,yp,0,255);
+                    // collisionData.set(xp,yp,1,tileData);
+                    // collisionData.set(xp,yp,2,y);
+                    // collisionData.set(xp,yp,3,x);
+                    //End Original
+                    // }
+
                 } else {
                     collisionData.set(xp,yp,0,0);
                 }

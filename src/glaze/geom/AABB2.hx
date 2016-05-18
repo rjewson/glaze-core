@@ -84,10 +84,10 @@ class AABB2
     }
 
     public function expand(i:Float) {
-        l+=i/2;
-        r-=i/2;
-        t+=i/2;
-        b-=i/2;
+        l-=i/2;
+        r+=i/2;
+        t-=i/2;
+        b+=i/2;
     }
 
     public inline function expand2(width:Float,height:Float) {

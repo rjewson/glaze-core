@@ -22,9 +22,12 @@ class GameLoop
     public function update(timestamp:Float):Bool {
         delta = prevAnimationTime==0 ? MIN_DELTA : timestamp - prevAnimationTime;
         prevAnimationTime = timestamp;
+        // trace(delta);
         if (updateFunc!=null)
-            updateFunc(Math.max(delta,MIN_DELTA),Math.floor(timestamp));
-            //updateFunc(1000/60,Math.floor(timestamp));
+            //trace(Math.max(delta,MIN_DELTA));
+            //updateFunc(Math.max(delta,MIN_DELTA),Math.floor(timestamp));
+            // updateFunc(1000/60,Math.floor(timestamp));
+            updateFunc(MIN_DELTA,Math.floor(timestamp));
         rafID = Browser.window.requestAnimationFrame(update);
         return false;
     }

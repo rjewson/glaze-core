@@ -26,11 +26,11 @@ class Vector2
         this.y = v.y; 
     }
 
-    public function clone():Vector2 {
+    inline public function clone():Vector2 {
         return new Vector2(x,y);
     }
 
-    public function normalize():Float {
+    inline public function normalize():Float {
         var t = Math.sqrt(x * x + y * y) + ZERO_TOLERANCE;
         x /= t;
         y /= t;
@@ -45,7 +45,7 @@ class Vector2
         return x * x + y * y;
     }
 
-    public function clampScalar(max:Float) {
+    inline public function clampScalar(max:Float) {
         var l = length();
         if (l > max) {
             multEquals(max / l);
@@ -94,42 +94,60 @@ class Vector2
         return new Vector2(this.y, -this.x);
     }    
 
-    public function leftHandNormalEquals() {
+    inline public function leftHandNormalEquals() {
         var t = this.x;
         this.x = this.y;
         this.y = -t;
     }
 
-    public function rightHandNormal():Vector2 {
+    inline public function rightHandNormal():Vector2 {
         return new Vector2(-this.y, this.x);
     }
 
-    public function rightHandNormalEquals() {
+    inline public function rightHandNormalEquals() {
         var t = this.x;
         this.x = -this.y;
         this.y = t;
     }
 
-    public function reflectEquals(normal:Vector2) {
+    inline public function reflectEquals(normal:Vector2) {
         var d = dot(normal);
         this.x -= 2*d*normal.x;
         this.y -= 2*d*normal.y;
     }
 
-    public function interpolate(v1:Vector2, v2:Vector2, t:Float) {
+    inline public function interpolate(v1:Vector2, v2:Vector2, t:Float) {
         copy(v1);
         multEquals(1-t);
         plusMultEquals(v2,t);
         // return v1.mult(1 - t).plus(v2.mult(t));
     }
 
-    public function setAngle(angle:Float) {
+    inline public function setAngle(angle:Float) {
         var len = length();
         this.x = Math.cos(angle)*len;
         this.y = Math.sin(angle)*len;
     }
 
-    public function distSqrd(v:Vector2):Float {
+    inline public function rotateEquals(angle : Float) {
+        var a : Float = angle * (Math.PI / 180);
+        var cos : Float = Math.cos(a);
+        var sin : Float = Math.sin(a);
+        this.x = (cos * x) - (sin * y);
+        this.y = (cos * y) + (sin * x);
+    }
+
+    public function setUnitRotation(angle:Float) {
+        var a : Float = angle * (Math.PI / 180);
+        this.x = Math.cos(a);
+        this.y = Math.sin(a);
+    }
+
+    public function heading():Float {
+        return Math.atan2(this.y,this.x);
+    }
+
+    inline public function distSqrd(v:Vector2):Float {
         var dX = x - v.x;
         var dY = y - v.y;
         return dX*dX + dY*dY;

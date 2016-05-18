@@ -55,6 +55,10 @@ class Bytes2D
         data.set( (y * internalWidth) + (x * bytesPerCell) + offset ,value);
     }
 
+    inline public function getReal(x:Float,y:Float,offset:Int):Int {
+        return get(Index(x),Index(y),offset);
+    }
+
     inline public function Index(value:Float):Int {
         //FIXME Not sure this always works...
         //return Std.int(value / cellSize);

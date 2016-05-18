@@ -1,4 +1,5 @@
 package glaze.tmx;
+import glaze.geom.Vector2;
 import haxe.xml.Fast;
 
 class TmxObject
@@ -15,6 +16,8 @@ class TmxObject
 	public var shared:TmxPropertySet;
 
 	public var combined:Map<String,String>;
+
+	public var polyline:Array<Vector2>;
 	
 	public function new(source:Fast, parent:TmxObjectGroup)
 	{
@@ -49,6 +52,20 @@ class TmxObject
 		combined = new Map<String,String>();
 		if (shared!=null) extend(combined,shared.keys);
 		extend(combined,custom.keys);
+
+		for (node in source.nodes.polyline)
+		{
+			polyline = new Array<Vector2>();
+			var points : Array<String> = node.att.points.split(" ");
+			var p : String;
+			for (p in points)
+			{
+				var coords : Array<String> = p.split(",");
+				var px : Float = Std.parseFloat(coords[0]);
+				var py : Float = Std.parseFloat(coords[1]);
+				polyline.push(new Vector2(x+px, y+py));
+			}
+		}
 
 	}
 
