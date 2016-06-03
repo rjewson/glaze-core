@@ -12,11 +12,13 @@ class GameLoop
     private var rafID:Int;
 
     public var updateFunc:Float->Int->Void;
+    var rafUpdate:Float->Void;
 
     public inline static var MIN_DELTA:Float = (1000/60) + 1e-08;
 
     public function new() {
         isRunning = false;
+        rafUpdate = update;
     }
 
     public function update(timestamp:Float):Bool {
@@ -28,7 +30,7 @@ class GameLoop
             //updateFunc(Math.max(delta,MIN_DELTA),Math.floor(timestamp));
             // updateFunc(1000/60,Math.floor(timestamp));
             updateFunc(MIN_DELTA,Math.floor(timestamp));
-        rafID = Browser.window.requestAnimationFrame(update);
+        rafID = Browser.window.requestAnimationFrame(rafUpdate);
         return false;
     }
 
@@ -37,7 +39,7 @@ class GameLoop
             return;
         isRunning = true;
         prevAnimationTime = 0;
-        rafID = Browser.window.requestAnimationFrame(update);
+        rafID = Browser.window.requestAnimationFrame(rafUpdate);
     }
 
     public function stop() {
