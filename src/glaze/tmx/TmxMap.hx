@@ -27,8 +27,7 @@ class TmxMap
 		properties = new TmxPropertySet();
 		var source:Fast = null;
 		var node:Fast = null;
-
-		if (Std.is(data, String)) source = new Fast(Xml.parse(data));
+ 		if (Std.is(data, String)) source = new Fast(Xml.parse(data));
 		// else if (Std.is(data, Xml)) source = new Fast(data);
 		// else if (Std.is(data, ByteArray)) source = new Fast(Xml.parse(data.toString()));
 		else throw "Unknown TMX map format";

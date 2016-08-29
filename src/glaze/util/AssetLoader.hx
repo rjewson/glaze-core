@@ -97,7 +97,7 @@ class ImageAsset implements ILoader
     }
 
     public function Load():Void {
-        image.src = url;
+        image.src = url + "?cb=" + Date.now().getTime();
         if (image.complete==true) {
             onLoad(null);
         } 
@@ -132,9 +132,9 @@ class BlobAsset implements ILoader
     public function Init(url:String) {
         this.url = url;
         xhr = new XMLHttpRequest();
-        xhr.open("GET",url,true);
         xhr.responseType = js.html.XMLHttpRequestResponseType.TEXT;//"text";
         xhr.onload = onLoad;
+        xhr.open("GET",this.url + "?cb=" + Date.now().getTime(),true);
     }
 
     public function Load():Void {
